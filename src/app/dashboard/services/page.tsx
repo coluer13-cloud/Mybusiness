@@ -179,9 +179,9 @@ export default function ServicesPage() {
                 {s.description && (
                   <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{s.description}</p>
                 )}
-                {s.price?.units && (
+                {!!s.price?.units && (
                   <p className="text-xs font-semibold text-blue-600 mt-1">
-                    {s.price.units} {s.price.currencyCode ?? 'EUR'}
+                    {String(s.price.units)} {String(s.price.currencyCode ?? 'EUR')}
                   </p>
                 )}
               </div>
