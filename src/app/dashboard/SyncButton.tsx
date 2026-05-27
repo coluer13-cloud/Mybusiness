@@ -15,7 +15,7 @@ export function SyncButton() {
       if (!res.ok) {
         const { error } = await res.json()
         if (error?.includes('RATE_LIMIT') || error?.includes('429')) {
-          alert('Google está limitando las peticiones. Espera 1 minuto e inténtalo de nuevo.')
+          alert('⏳ Cuota de Google agotada.\n\nEspera 60 segundos e inténtalo de nuevo.\n\nSi el problema persiste, aumenta la cuota en Google Cloud Console → APIs y servicios → Cuotas.')
         } else {
           alert(`Error al sincronizar: ${error}`)
         }

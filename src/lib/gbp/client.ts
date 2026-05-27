@@ -19,11 +19,7 @@ async function gbpFetch(
   })
   if (res.status === 401) throw new Error('GBP_UNAUTHORIZED')
   if (res.status === 429) {
-    if (retries > 0) {
-      await new Promise(r => setTimeout(r, (4 - retries) * 2000 + 1000))
-      return gbpFetch(url, accessToken, options, retries - 1)
-    }
-    throw new Error('RATE_LIMIT: Demasiadas peticiones a Google. Espera 1 minuto e inténtalo de nuevo.')
+    throw new Error('RATE_LIMIT')
   }
   if (!res.ok) {
     const body = await res.text()
