@@ -14,7 +14,11 @@ export function SyncButton() {
       const res = await fetch('/api/gbp/sync', { method: 'POST' })
       if (!res.ok) {
         const { error } = await res.json()
-        alert(`Error al sincronizar: ${error}`)
+        if (error?.includes('RATE_LIMIT') || error?.includes('429')) {
+          alert('Google está limitando las peticiones. Espera 1 minuto e inténtalo de nuevo.')
+        } else {
+          alert(`Error al sincronizar: ${error}`)
+        }
       } else {
         router.refresh()
       }
