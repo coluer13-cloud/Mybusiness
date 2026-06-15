@@ -39,6 +39,7 @@ export async function syncGbp(userId: string, accessToken: string) {
 
   const { account_id, location_id } = config!
 
+  const labels = ['location', 'reviews', 'posts', 'photos', 'attributes', 'questions', 'services']
   const [location, reviews, posts, photos, attributesData, questions, services] =
     await Promise.allSettled([
       getLocation(location_id, accessToken),
@@ -49,6 +50,14 @@ export async function syncGbp(userId: string, accessToken: string) {
       listQuestions(location_id, accessToken),
       listServiceItems(location_id, accessToken),
     ])
+
+  const results = [location, reviews, posts, photos, attributesData, questions, services]
+  const errors: Record<string, string> = {}
+  results.forEach((r, i) => {
+    if (r.status === 'rejected') {
+      errors[labels[i]] = r.reason instanceof Error ? r.reason.message : String(r.reason)
+    }
+  })
 
   if (location.status === 'fulfilled') {
     const loc = location.value
@@ -172,5 +181,6 @@ export async function syncGbp(userId: string, accessToken: string) {
     accountId: account_id,
     locationId: location_id,
     synced_at: new Date().toISOString(),
+    errors,
   }
 }
